@@ -56,7 +56,7 @@ import java.util.*;
  * and replace the {@link run} method implementation with your own logic.
  * </p>
  */
-@Plugin(type = Command.class, menuPath = "Plugins>Users Plugins>Lucy Bead Finder")
+@Plugin(type = Command.class, menuPath = "Plugins>Lucy Bead Finder")
 public class Lucy_BeadFinder<T extends RealType<T>> implements Command {
     //
     // Feel free to add more parameters here...
