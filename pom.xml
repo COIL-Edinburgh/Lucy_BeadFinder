@@ -14,7 +14,7 @@
 
 	<groupId>bio.coil</groupId>
 	<artifactId>Lucy_BeadFinder</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 
 	<name>Lucy Bead Finder</name>
 	<description>A project to find magnetic beads in DAPI images of chromosomes</description>

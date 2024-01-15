@@ -116,29 +116,35 @@ public class Lucy_BeadFinder<T extends RealType<T>> implements Command {
                     IJ.run(masks, "Erode", "");
 
                     //Analyse (ROIs)
-                    IJ.run(masks, "Analyze Particles...", "size=700-Infinity pixel circularity=0.75-1.00 show=Nothing add");
-
-                    //Draw ROIs
-                    Roi[] rois = roiManager.getRoisAsArray();
-                    roiManager.reset();
+                    IJ.run(masks, "Analyze Particles...", "size=500-Infinity pixel circularity=0.75-1.00 show=Masks");
+                    ImagePlus overlay = WindowManager.getCurrentImage();
+                    IJ.run("16-bit", "");
+                    overlay.setTitle("Overlay");
 
                     ImagePlus max = ZProjector.run(imp, "Maximum");
                     max.show();
                     max.setTitle("Maximum");
-                    ImagePlus overlay =IJ.createImage("Overlay", "16-bit black", max.getWidth(), max.getHeight(), max.getNChannels(), max.getNSlices(), max.getNFrames());
-                    overlay.show();
-                    for (int i = 0; i<rois.length;i++){
-                        drawNumbers(i+1,overlay,rois[i]);
-                    }
+
+                    String outputFile = createDirectory(filename);
+                    IJ.save(max, Paths.get(outputFile, filename + "_Max.tif").toString());
+                    IJ.save(overlay, Paths.get(outputFile, filename + "_Overlay.tif").toString());
                     IJ.run("Merge Channels...", "c1=[Overlay] c4=[Maximum] create");
                     ImagePlus merge = WindowManager.getCurrentImage();
-                    IJ.save(merge, Paths.get(String.valueOf(filePath), filename + "_Overlay.tif").toString());
+                    IJ.save(merge, Paths.get(outputFile, filename + "_Merge.tif").toString());
                     IJ.run("Close All", "");
                 }
             }
         }
 
+        private String createDirectory(String filename) {
 
+            String newDirectory = Paths.get(filePath.toString(),filename).toString();
+            File tmpDir = new File(newDirectory);
+            if (!tmpDir.exists()) {
+                new File(newDirectory).mkdir();
+            }
+            return newDirectory;
+        }
 
     private void drawNumbers(int Counter, ImagePlus ProjectedWindow, Roi roi) {
         ImageProcessor ip = ProjectedWindow.getProcessor();
